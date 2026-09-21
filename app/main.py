@@ -25,6 +25,10 @@ def add_user(new_user: UserCreate):
     users.append(new_user)
     return new_user
 
+@app.get("/api/users", status_code=status.HTTP_200_OK)
+def get_users():
+    return users
+
 @app.delete("/api/users/{user_id}]", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(user_id: int):
     for index, existing_user in enumerate(users):
