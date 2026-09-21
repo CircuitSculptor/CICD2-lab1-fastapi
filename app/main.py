@@ -9,11 +9,18 @@ users: list[UserCreate] = []
 def health():
     return{"status": "ok"}
 
+@app.get("/hello")
+def hello():
+    return{"message":"Hello from FastAPI"}
+
 
 @app.post("/api/users", status_code=status.HTTP_201_CREATED)
 def add_user(new_user: UserCreate):
     for existing_user in users:
         if existing_user.user_id == new_user.user_id:
-            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="This user already exists")
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT, 
+                detail="This user already exists"
+            )
     users.append(new_user)
     return new_user
