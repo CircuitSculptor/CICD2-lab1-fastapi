@@ -30,3 +30,12 @@ def test_create_user_returns_201(client):
     #assert data["user_id"] == 10
     #assert data["name"] == "B"
     #assert data["email"] == "bk@atu.ie"
+
+
+def test_duplicate_user_id_returns_409(client):
+    client.post("/api/users", json=user_payload(uid=2))
+
+    response = client.post("/api/users", json=user_payload(uid=2))
+
+    assert response.status_code == 409
+    assert "exists" in response.json()["detail"].lower()
