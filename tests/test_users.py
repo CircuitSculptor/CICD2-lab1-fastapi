@@ -86,7 +86,7 @@ def test_get_missing_user_returns_404(client):
 def test_delete_existing_user_returns_204(client):
     client.post("/api/users", json=user_payload(uid=20))
 
-    response = client.delete("/api/user/20")
+    response = client.delete("/api/users/20")
 
     assert response.status_code == 204
     assert response.content == b''
