@@ -3,7 +3,7 @@ from typing import Annotated
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints
 
 NameStr = Annotated[str, StringConstraints(min_length=2, max_length=50)]
-StudentIdStr = Annotated[str, StringConstraints(pattern=r"^S\d{7}$")]
+StudentIdStr = Annotated[str, StringConstraints(pattern=r"^G\d{7}$")]
 
 class UserCreate(BaseModel):
     name: NameStr
