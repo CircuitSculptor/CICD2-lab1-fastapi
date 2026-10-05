@@ -32,7 +32,7 @@ def add_user(new_user: UserCreate, db: Session = Depends(get_db)):
     try:
         db.commit()
         db.refresh(db_user)
-    excpet IntegrityError:
+    except IntegrityError:
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

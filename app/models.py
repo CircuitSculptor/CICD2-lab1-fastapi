@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import Integer, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 class Base(DeclarativeBase):
@@ -8,11 +8,11 @@ class UserDB(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String(50), mullable=False)
+    name: Mapped[str] = mapped_column(String(50), nullable=False)
     email: Mapped[str] = mapped_column(
         String(255), unique=True, index=True, nullable=False
     )
     age: Mapped[int] = mapped_column(Integer, nullable=False)
     student_id: Mapped[str] = mapped_column(
-        String(8), uniquw=True, nullable=False
+        String(8), unique=True, nullable=False
     )

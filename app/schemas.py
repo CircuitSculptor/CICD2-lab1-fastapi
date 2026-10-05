@@ -1,10 +1,13 @@
 from typing import Annotated
 
-from pydantic import BaseModel, EmailStr, Field, StringConstraints
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, StringConstraints
+
+NameStr = Annotated[str, StringConstraints(min_length=2, max_length=50)]
+StudentIdStr = Annotated[str, StringConstraints(pattern=r"^S\d{7}$")]
 
 class UserCreate(BaseModel):
     name: NameStr
-    emai;: EmailStr
+    emai: EmailStr
     age: int = Field(gt=18, lt=120)
     student_id: StudentIdStr
 
