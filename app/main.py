@@ -23,13 +23,14 @@ def hello():
     return{"message":"Hello from FastAPI"}
 
 
-@app.post("/api/users", 
-    response_model=UserRead, 
-    status_code=status.HTTP_201_CREATED,)
+@app.post(
+    "/api/users",
+    response_model=UserRead,
+    status_code=status.HTTP_201_CREATED,
+)
 def add_user(new_user: UserCreate, db: Session = Depends(get_db)):
-    db_user = UserDB(**new_user.model_demp())
+    db_user = UserDB(**new_user.model_dump())
     db.add(db_user)
-
     try:
         db.commit()
         db.refresh(db_user)
@@ -38,8 +39,7 @@ def add_user(new_user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="A user with this email or student_id already exists",
-        )
-    
+    )
     return db_user
 
 
@@ -53,7 +53,7 @@ def get_users(db: Session = Depends(get_db)):
 def get_user(user_id: int, db: Session = Depends(get_db)):
     db_user = db.get(UserDB, user_id)
 
-    if db_users is None:
+    if db_user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",

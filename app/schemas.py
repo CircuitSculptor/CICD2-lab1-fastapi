@@ -7,7 +7,7 @@ StudentIdStr = Annotated[str, StringConstraints(pattern=r"^G\d{7}$")]
 
 class UserCreate(BaseModel):
     name: NameStr
-    emai: EmailStr
+    email: EmailStr
     age: int = Field(gt=18, lt=120)
     student_id: StudentIdStr
 
