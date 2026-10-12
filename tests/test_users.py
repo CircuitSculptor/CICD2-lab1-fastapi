@@ -125,7 +125,8 @@ def test_get_user_by_id(client):
     response = client.get(f"/api/users/{user_id})")
         
     assert response.status_code == 200
-    assert response.json()["email"] == "bartel@atu.ie"
+    assert response.json()["email"] == "bartek@atu.ie"
+
 
 def test_get_missiing_user_returns_404(client):
     response = client.get("/api/users/999")
