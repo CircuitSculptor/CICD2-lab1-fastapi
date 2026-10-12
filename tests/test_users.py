@@ -134,3 +134,23 @@ def test_get_missiing_user_returns_404(client):
     assert response.status_code == 404
     assert "not found" in response.json()["detail"].lower()
 
+
+def test_delete_user(client):
+    created = client.post(
+        "/api/users",
+        json=user_payload(),
+    ).json()
+
+    user_id = created["id"]
+
+    response = client.delete(f"/api/users/{user_id}")
+    assert response.status_code == 204
+
+    response = client.get(f"/api/users/{user_id}")
+    assert response.status_code == 404
+
+
+def test_delete_missing_user_returns_404(client):
+    response = client.delete("/api/users/999")
+
+    assert response.status_code == 404
