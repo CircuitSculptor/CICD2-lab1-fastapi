@@ -1,12 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
+from app.database import get_db
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import StaticPool
 from app.models import Base
 
-TEST_DATABASE_URL + "sqlite+pysqlite://"
+TEST_DATABASE_URL = "sqlite+pysqlite://"
 
 test_engine = create_engine(
     TEST_DATABASE_URL,
@@ -20,8 +21,8 @@ TestingSessionLocal = sessionmaker(
     expire_on_commit=False,
 )
 
-def override_get_db:
-    db = Testing Session()
+def override_get_db():
+    db = TestingSessionLocal()
     try:
         yield db
     finally:
