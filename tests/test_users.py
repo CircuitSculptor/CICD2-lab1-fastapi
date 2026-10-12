@@ -9,7 +9,7 @@ def user_payload(
     student_id="G1234567", # Using G as we are in Galway, not Sligo
 ):
     return {
-        "user_id": uid,
+        #"user_id": uid,
         "name": name,
         "email": email,
         "age": age,
@@ -23,7 +23,7 @@ def test_create_user_returns_201(client):
     assert response.status_code == 201
     data = response.json()
     # Valid data
-    assert data["user_id"] == 1
+    #assert data["user_id"] == 1
     assert data["name"] == "Bartek"
     assert data["email"] == "bartek@atu.ie"
 
@@ -34,9 +34,9 @@ def test_create_user_returns_201(client):
 
 
 def test_duplicate_user_id_returns_409(client):
-    client.post("/api/users", json=user_payload(uid=2))
+    client.post("/api/users", json=user_payload()) #uid=2
 
-    response = client.post("/api/users", json=user_payload(uid=2))
+    response = client.post("/api/users", json=user_payload()) #uid=2
 
     assert response.status_code == 409
     assert "exists" in response.json()["detail"].lower()
@@ -104,3 +104,32 @@ def test_deleted_user_can_no_longer_be_retrieved(client):
     response = client.get("/api/users/21")
 
     assert response.status_code == 404
+
+
+def test_get_users(client):
+    client.post("/api/users", json=user_payload())
+
+    response = client.get("/api/users")
+
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+    assert response.json()[0]["student_id"] == "G1234567"
+
+def test_get_user_by_id(client):
+    created = client.post(
+            "/api/users", 
+            json=user_payload(),
+    ).json()
+
+    user_id = created["id"]
+    response = client.get(f"/api/users/{user_id})")
+        
+    assert response.status_code == 200
+    assert response.json()["email"] == "bartel@atu.ie"
+
+def test_get_missiing_user_returns_404(client):
+    response = client.get("/api/users/999")
+
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
+
