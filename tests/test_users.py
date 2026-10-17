@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, status, Response
 import pytest
 
 def user_payload(
-    uid=1,
+    #uid=1,
     name="Bartek",
     email="bartek@atu.ie",
     age=21,
@@ -49,7 +49,7 @@ def test_duplicate_user_id_returns_409(client):
 def test_bad_student_id_returns_422(client, bad_student_id):
     response = client.post(
         "/api/users",
-        json=user_payload(uid=3, student_id=bad_student_id),
+        json=user_payload(student_id=bad_student_id),
     )
 
     assert response.status_code == 422
@@ -59,21 +59,21 @@ def test_get_users_return_created_users(client):
     client.post("/api/users", json=user_payload(name="Bob", email="bob@atu.ie")) #uid=10
 
     response = client.get("/api/users")
-
+    user_id = response.json()[0]["id"]
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 1
-    #assert data[0]["user_id"] == 10
+    assert data[0]["id"] == user_id
     assert data[0]["name"] == "Bob"
 
 
 def test_get_existing_user_returns_200(client):
-    client.post("/api/users", json=user_payload(uid=11)) #uid=11
-
-    response = client.get("/api/users/11")
+    data = client.post("/api/users", json=user_payload()) #uid=11
+    user_id = data.json()["id"]
+    response = client.get(f"/api/users/{user_id}")
 
     assert response.status_code == 200
-    assert response.json()["user_id"] == 11
+    assert response.json()["id"] == user_id
 
 
 def test_get_missing_user_returns_404(client):
@@ -84,9 +84,9 @@ def test_get_missing_user_returns_404(client):
 
 
 def test_delete_existing_user_returns_204(client):
-    client.post("/api/users", json=user_payload()) #uid=20
-
-    response = client.delete("/api/users/20")
+    data = client.post("/api/users", json=user_payload()) #uid=20
+    user_id = data.json()["id"]
+    response = client.delete(f"/api/users/{user_id}")
 
     assert response.status_code == 204
     assert response.content == b''
@@ -98,10 +98,11 @@ def test_delete_missing_user_returns_404(client):
     assert response.json()["detail"] == "User not found"
 
 def test_deleted_user_can_no_longer_be_retrieved(client):
-    client.post("/api/users", json=user_payload(uid=21))
-    client.delete("/api/users/21")
+    data = client.post("/api/users", json=user_payload()) #uid=21
+    user_id = data.json()["id"]
 
-    response = client.get("/api/users/21")
+    client.delete(f"/api/users/{user_id}")
+    response = client.get(f"/api/users/{user_id}")
 
     assert response.status_code == 404
 
@@ -117,14 +118,15 @@ def test_get_users(client):
 
 def test_get_user_by_id(client):
     created = client.post(
-            "/api/users", 
-            json=user_payload(),
+        "/api/users",
+        json=user_payload(),
     ).json()
-
     user_id = created["id"]
-    response = client.get(f"/api/users/{user_id})")
-        
+
+    response = client.get(f"/api/users/{user_id}")
+
     assert response.status_code == 200
+    assert response.json()["id"] == user_id
     assert response.json()["email"] == "bartek@atu.ie"
 
 
