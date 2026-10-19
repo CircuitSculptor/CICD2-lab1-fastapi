@@ -9,7 +9,7 @@ from app.schemas import UserCreate, UserRead
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Lab 3 - FastAPI SQLAlchemy User API")
+app = FastAPI(title="Lab 4 - FastAPI SQLAlchemy User API")
 
 users: list[UserCreate] = []
 
