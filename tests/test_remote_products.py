@@ -16,3 +16,23 @@ def test_remote_product_success(client):
         assert response.json()["name"] == "Laptop"
     finally:
         app.dependency_overrides.pop(get_product_fetcher, None)
+
+def fake_product_missing(product_id: int):
+    request = httpx.Request(
+        "GET", f"http://example.test/products/{product_id}"
+    )
+    response = httpx.response(404, request=request)
+    raise httpx.HTTPStatusError(
+        "Not found", request=request, response=response
+    )
+
+def provide_missing_product():
+    return fake_product_missing
+
+def test_remote_product_missing(client):
+    app.dependency_overrides[get_product_fetcher] = provide_missing_product
+    try:
+        response = client.get("/api/productd/99")
+        assert response.status_code == 404
+    finally:
+        app.dependency_overrides.pop(get_product_fetcher, None)
