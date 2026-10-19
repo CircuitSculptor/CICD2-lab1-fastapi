@@ -1,12 +1,12 @@
 import os
-import httpx2
+import httpx
 
 PRODUCT_SERVICE_URL = os.getenv(
     "PRODUCT_SERVICE_UL", "http://127.0.01:8001"
 )
 
 def fetch_product(product_id: int) -> dict:
-    response = httpx2.get(
+    response = httpx.get(
         f"{PRODUCT_SERVICE_URL}/products/{product_id}",
         timeout=3.0
     )
