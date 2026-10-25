@@ -41,7 +41,8 @@ def fake_service_unavailable(product_id: int):
     request = httpx.Request(
         "GET", f"http://example.test/products/{product_id}"
     )
-    raise httpx.ConnectionError("Connection refused", request=request)
+    #raise httpx.ConnectionError("Connection refused", request=request)
+    raise httpx.ConnectError("Connection refused", request=request)
 
 def provide_unavailable_product():
     return fake_service_unavailable
@@ -49,7 +50,7 @@ def provide_unavailable_product():
 def test_remote_service_unavailable(client):
     app.dependency_overrides[get_product_fetcher] = provide_unavailable_product
     try:
-        response = client.get("/api/product/1")
+        response = client.get("/api/products/1")
         assert response.status_code == 503
     finally:
         app.dependency_overrides.pop(get_product_fetcher, None)
