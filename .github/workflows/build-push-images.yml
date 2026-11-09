@@ -35,5 +35,5 @@ jobs:
           file: ./Dockerfile.user
           push: true
           tags: |
-          ${{ env.IMAGE }}/user-service:latest
-          ${{ env.IMAGE }}/user-service:${{ github.sha }}
+            ${{ env.IMAGE }}/user-service:latest
+            ${{ env.IMAGE }}/user-service:${{ github.sha }}
