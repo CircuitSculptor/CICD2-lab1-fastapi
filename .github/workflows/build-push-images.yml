@@ -33,8 +33,17 @@ jobs:
         with:
           context: .
           file: ./Dockerfile.user
-          file: ./Dockerfile.product
           push: true
           tags: |
             ${{ env.IMAGE }}/user-service:latest
             ${{ env.IMAGE }}/user-service:${{ github.sha }}
+            
+      - name: Build and Push Product Service
+        uses: docker/build-push-action@v6
+        with: 
+          context: .
+          file: ./Dockerfile.product
+          push: true
+          tags: |
+            ${{ env.IMAGE }}/product-service:latest
+            ${{ env.IMAGE }}/product-service:${{ github.sha }}
