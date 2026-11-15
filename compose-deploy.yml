@@ -1,0 +1,18 @@
+services:
+  user-service:
+    image: ghcr.io/CircuitSculptor/CICD2-lab1-fastapi/user-service:lastest
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "sqlite:////data/app.db"
+      PRODUCT_SERVICE_URL: "http://product-service:8001"
+    volumes:
+      - user_data:/data
+
+  product-service:
+    image: ghcr.io/CircuitSculptor/CICD2-lab1-fastapi/product-service:lastest
+    ports:
+      - "8001:8001"
+
+volumes:
+  user_data:
