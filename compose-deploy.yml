@@ -1,6 +1,6 @@
 services:
   user-service:
-    image: ghcr.io/CircuitSculptor/CICD2-lab1-fastapi/user-service:lastest
+    image: ghcr.io/circuitsculptor/cicd2-lab1-fastapi/user-service:lastest
     ports:
       - "8000:8000"
     environment:
@@ -10,7 +10,7 @@ services:
       - user_data:/data
 
   product-service:
-    image: ghcr.io/CircuitSculptor/CICD2-lab1-fastapi/product-service:lastest
+    image: ghcr.io/circuitsculptor/cicd2-lab1-fastapi/product-service:lastest
     ports:
       - "8001:8001"
 
