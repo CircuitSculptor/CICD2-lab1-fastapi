@@ -7,6 +7,7 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: "sqlite:////data/app.db"
+      PRODUCT_SERVICE_URL: "http://product-service:8001"
     volumes:
       - user_data:/data
 

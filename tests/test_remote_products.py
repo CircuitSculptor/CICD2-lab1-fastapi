@@ -21,7 +21,7 @@ def fake_product_missing(product_id: int):
     request = httpx.Request(
         "GET", f"http://example.test/products/{product_id}"
     )
-    response = httpx.response(404, request=request)
+    response = httpx.Response(404, request=request)
     raise httpx.HTTPStatusError(
         "Not found", request=request, response=response
     )
@@ -32,8 +32,9 @@ def provide_missing_product():
 def test_remote_product_missing(client):
     app.dependency_overrides[get_product_fetcher] = provide_missing_product
     try:
-        response = client.get("/api/productd/99")
+        response = client.get("/api/products/99")
         assert response.status_code == 404
+        assert response.json()["detail"] == "Product not found"
     finally:
         app.dependency_overrides.pop(get_product_fetcher, None)
 

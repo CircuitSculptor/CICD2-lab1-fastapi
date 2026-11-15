@@ -2,7 +2,7 @@ import os
 import httpx
 
 PRODUCT_SERVICE_URL = os.getenv(
-    "PRODUCT_SERVICE_UL", "http://127.0.01:8001"
+    "PRODUCT_SERVICE_URL", "http://127.0.0.1:8001"
 )
 
 def fetch_product(product_id: int) -> dict:
